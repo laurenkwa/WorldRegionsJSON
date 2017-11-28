@@ -1,0 +1,82 @@
+<html>
+	<head>
+	<title>Regions of the World</title>
+    <link rel = "stylesheet" type = "text/css" href = "style/bootstrap.min.css"/>    
+	<link rel="stylesheet" href="style/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Regions of the World</h1>
+            <br/><br/>
+			<select id="world-regions">
+				<option selected value=""></option>
+				<option value="africa">Africa</option>
+				<option value="americas">Americas</option>
+				<option value="asia">Asia</option>
+				<option value="europe">Europe</option>
+				<option value="oceania">Oceania</option>
+			</select>
+			<div id="divResult" class="container"></div>
+                
+		</div>
+    <script type="text/javascript">
+    var regionUrl;
+        var json;
+    $(function () {
+      var baseUrl = 'https://restcountries.eu';
+      
+      var getData = function(name) {
+			if (name.value == "") {
+				$("#divResult").html("");
+				return;
+			}
+      
+         regionUrl = baseUrl + '/rest/v2/region/' + name.value;
+			
+			$.ajax({
+				url: regionUrl,
+				type: "GET",
+				dataType: 'json',
+				error: function (x, y, z) {
+					alert(x + '\n' + y + '\n' + z);
+				},
+				success: function (name) {
+                    
+					WriteResponse(name);
+				}
+			});
+		}
+      
+      var WriteResponse = function (name) {
+         
+        $.getJSON(regionUrl,
+            function (data) {
+            var tr;
+             var strResult = "<h3>Number of countries: " + data.length + "</h3><br/><br/><table class='container'><tr class='row'><th class='col-md-6'>Country</th><th class='col-md-2'>Capital</th><th class='col-md-2'><div class='population'>Population</div></th><th class='col-md-2'>Flag</th></tr>";
+            for (var i = 0; i < data.length; i++) {
+                strResult += '<tr class="row">';
+                strResult += '<td class="col-md-6">' + data[i].name + "</td>";
+                strResult += '<td class="col-md-2">' + data[i].capital + "</td>";
+                strResult += '<td class="col-md-2"><div class="population">' + data[i].population + "</div></td>";
+                strResult += '<td class="col-md-2"><div class="flag">' + "<img src='" + data[i].flag + "' style='width: 60px;' />"; + "</div></td></tr>";
+        
+            }
+              $("#divResult").html(strResult);
+});
+
+		}
+      
+      $("#world-regions").change(function() {
+        
+        
+        getData(this);
+      });
+ }); 
+        
+	</script>
+    <script src="https://code.jquery.com/jquery-3.2.1.js"
+integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+crossorigin="anonymous"></script>
+	</body>
+</html>

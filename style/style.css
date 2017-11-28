@@ -1,0 +1,15 @@
+body {
+text-align:center;
+width:100%;
+}
+
+td {
+    border-spacing: 50px;
+    padding: 30px;
+    
+    
+}
+
+.population {
+text-align: right;
+}
